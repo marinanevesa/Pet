@@ -24,33 +24,36 @@ def subir_faq_v4(nome_arquivo):
         if not texto or "P:" not in texto.upper(): continue
 
         try:
-            # 1. Extrai a CATEGORIA (C:)
+            # 1. Extrai a CATEGORIA (C:) - está no final
             categoria = "Medicamentos"
-            if "C:" in texto:
-                partes_c = texto.split("C:")
-                categoria = partes_c[1].strip().split()[0] if partes_c[1].strip() else "Medicamentos"
-                texto = partes_c[0].strip()
+            categoria_match = re.search(r'C:\s*(.+?)$', texto)
+            if categoria_match:
+                categoria = categoria_match.group(1).strip()
+                texto = texto[:categoria_match.start()].strip()
 
-            # 2. Separa Pergunta e Resposta (pelo divisor R:)
-            partes_pr = re.split(r'[rR]:', texto)
+            # 2. Extrai as TAGS (separadas por ;) - vem antes de C:
+            tags = "NaN"
+            tags_match = re.search(r'TAGS:\s*(.+?)\.?\s*$', texto)
+            if tags_match:
+                tags_raw = tags_match.group(1).strip().rstrip(';').rstrip('.')
+                # Divide por ; e retorna como string com cada tag
+                tags = "; ".join([tag.strip() for tag in tags_raw.split(';') if tag.strip()])
+                texto = texto[:tags_match.start()].strip()
+
+            # 3. Separa Pergunta (P:) e Resposta (R:)
+            partes_pr = re.split(r'\s+R:\s+', texto, flags=re.IGNORECASE)
             pergunta = partes_pr[0].replace("P:", "").strip()
             resto = partes_pr[1] if len(partes_pr) > 1 else ""
 
-            # 3. Extrai as TAGS (estão entre colchetes [ ] ou após TAGS:)
-            tags = "NaN"
-            tags_match = re.search(r'TAGS:\s*(\[.*?\]|[^\n()]+?)(?:\(|FONTE:|$)', resto)
-            if tags_match:
-                tags = tags_match.group(1).strip()
-                resto = resto.replace(tags_match.group(0), "").strip()
-
-            # 4. Extrai a FONTE (pode ser Ref: ou FONTE:)
+            # 4. Extrai a FONTE (Ref: ou FONTE:)
             fonte = "NaN"
-            fonte_match = re.search(r'\(Ref: (.*?)\)|FONTE: (.*?)$', resto)
+            fonte_match = re.search(r'\(Ref:\s*(.+?)\)|FONTE:\s*(.+?)$', resto)
             if fonte_match:
                 fonte = fonte_match.group(1) if fonte_match.group(1) else fonte_match.group(2)
-                resto = resto.replace(str(fonte_match.group(0)), "").strip()
+                fonte = fonte.rstrip(')')
+                resto = re.sub(r'\(Ref:\s*.+?\)|FONTE:\s*.+?$', '', resto).strip()
 
-            # 5. O que sobrou no 'resto' é a resposta limpa
+            # 5. O que sobrou é a resposta
             resposta = resto.strip()
 
             # Monta o documento
