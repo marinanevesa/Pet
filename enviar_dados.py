@@ -4,78 +4,141 @@ from datetime import datetime, timezone
 import re
 import json
 
+# ============================================================================
+# CONFIGURAÇÃO DOS ARQUIVOS
+# Para adicionar um novo arquivo: adicione uma tupla (caminho, categoria)
+# Para remover: comente ou delete a linha
+# ============================================================================
+ARQUIVOS_PROCESSAR = [
+    ("./faqs/medicamento.docx", "Medicamentos"),
+    ("./faqs/local.docx", "Local"),
+    ("./faqs/vacinas.docx", "Vacina"),
+]
+
 uri = "mongodb+srv://marina:Ju050100@marinanevesa.rcgenti.mongodb.net/?appName=marinanevesa"
 
-try:
-    client = MongoClient(uri)
-    db = client['ministerio_saude']
-    collection = db['faq_medicamentos']
-    collection.delete_many({}) 
-    print("Conectado! Preparando para subir o FAQ completo com TAGS...")
-except Exception as e:
-    print(f"Erro ao conectar: {e}")
-
-def subir_faq_v4(nome_arquivo):
-    doc = Document(nome_arquivo)
+def subir_faq(nome_arquivo, categoria, collection):
+    """
+    Processa um arquivo .docx e envia as FAQs para o MongoDB
+    
+    Args:
+        nome_arquivo: Caminho do arquivo .docx
+        categoria: Categoria a ser atribuída às FAQs deste arquivo
+        collection: Coleção do MongoDB onde inserir os dados
+    """
+    try:
+        doc = Document(nome_arquivo)
+    except Exception as e:
+        print(f"Erro ao abrir arquivo {nome_arquivo}: {e}")
+        return 0
     count = 0
 
     for para in doc.paragraphs:
         texto = para.text.strip()
-        if not texto or "P:" not in texto.upper(): continue
+        if not texto or "P:" not in texto.upper(): 
+            continue
 
         try:
-            # 1. Extrai a CATEGORIA (C:) - está no final
-            categoria = "Medicamentos"
-            categoria_match = re.search(r'C:\s*(.+?)$', texto)
-            if categoria_match:
-                categoria = categoria_match.group(1).strip()
-                texto = texto[:categoria_match.start()].strip()
-
-            # 2. Extrai as TAGS (separadas por ;) - vem antes de C:
+            # 1. Extrai as TAGS (separadas por vírgula) - vem no final antes do ponto
             tags = "NaN"
             tags_match = re.search(r'TAGS:\s*(.+?)\.?\s*$', texto)
             if tags_match:
-                tags_raw = tags_match.group(1).strip().rstrip(';').rstrip('.')
-                # Divide por ; e retorna como string com cada tag
-                tags = "; ".join([tag.strip() for tag in tags_raw.split(';') if tag.strip()])
+                tags_raw = tags_match.group(1).strip().rstrip('.').rstrip(',')
+                # Divide por vírgula e retorna como lista
+                tags_list = [tag.strip() for tag in tags_raw.split(',') if tag.strip()]
                 texto = texto[:tags_match.start()].strip()
+            else:
+                tags_list = []
+
+            # 2. Extrai a FONTE (Ref: ou FONTE:)
+            fonte = "NaN"
+            fonte_match = re.search(r'\(Ref:\s*(.+?)\)|\(FONTE:\s*(.+?)\)', texto)
+            if fonte_match:
+                fonte = fonte_match.group(1) if fonte_match.group(1) else fonte_match.group(2)
+                fonte = fonte.strip()
+                texto = texto[:fonte_match.start()].strip()
 
             # 3. Separa Pergunta (P:) e Resposta (R:)
             partes_pr = re.split(r'\s+R:\s+', texto, flags=re.IGNORECASE)
+            if len(partes_pr) < 2:
+                continue
+                
             pergunta = partes_pr[0].replace("P:", "").strip()
-            resto = partes_pr[1] if len(partes_pr) > 1 else ""
+            resposta = partes_pr[1].strip()
 
-            # 4. Extrai a FONTE (Ref: ou FONTE:)
-            fonte = "NaN"
-            fonte_match = re.search(r'\(Ref:\s*(.+?)\)|FONTE:\s*(.+?)$', resto)
-            if fonte_match:
-                fonte = fonte_match.group(1) if fonte_match.group(1) else fonte_match.group(2)
-                fonte = fonte.rstrip(')')
-                resto = re.sub(r'\(Ref:\s*.+?\)|FONTE:\s*.+?$', '', resto).strip()
-
-            # 5. O que sobrou é a resposta
-            resposta = resto.strip()
-
-            # Monta o documento
+            # Monta o documento com a categoria recebida
             item = {
                 "question": pergunta,
                 "answer": resposta,
-                "tags": tags,
-                "category": categoria,
+                "tags": tags_list,
                 "source": fonte,
+                "category": categoria,
                 "isActive": True,
                 "updatedAt": datetime.now(timezone.utc)
             }
             
             collection.insert_one(item)
             count += 1
+            
         except Exception as err:
-            print(f"Pulei uma linha com erro: {texto[:30]}... Erro: {err}")
+            print(f"Erro ao processar linha: {texto[:50]}... | Erro: {err}")
 
-    print(f"🚀 Missão Cumprida! {count} perguntas com TAGS enviadas com sucesso.")
+    print(f"\nTotal inserido do arquivo: {count} perguntas")
+    return count
+
+
+def main():
+    """
+    Função principal que conecta ao MongoDB e processa todos os arquivos configurados
+    """
+    print("=" * 100)
+    print("INICIANDO ENVIO DE FAQs PARA O MONGODB")
+    print("=" * 100 + "\n")
     
+    # Conecta ao MongoDB
+    try:
+        client = MongoClient(uri)
+        db = client['ministerio_saude']
+        collection = db['faq_medicamentos']
+        print("Conectado ao MongoDB com sucesso!")
+        
+        # Limpa a coleção antes de inserir novos dados
+        deleted_count = collection.delete_many({}).deleted_count
+        print(f"Removidos {deleted_count} documentos antigos da coleção\n")
+        
+    except Exception as e:
+        print(f"Erro ao conectar ao MongoDB: {e}")
+        return
+    
+    total_inseridos = 0
+    
+    # Processa cada arquivo
+    for arquivo, categoria in ARQUIVOS_PROCESSAR:
+        print("\n" + "█" * 100)
+        print(f"PROCESSANDO: {arquivo}")
+        print(f"CATEGORIA: {categoria}")
+        print("█" * 100 + "\n")
+        
+        count = subir_faq(arquivo, categoria, collection)
+        total_inseridos += count
+        
+        print()
+    
+    # Resumo final
+    print("\n" + "=" * 100)
+    print("RESUMO FINAL")
+    print("=" * 100)
+    print(f"Total de arquivos processados: {len(ARQUIVOS_PROCESSAR)}")
+    print(f"Total de FAQs inseridas no MongoDB: {total_inseridos}")
+    print("\n" + "=" * 100)
+    print("ENVIO CONCLUÍDO COM SUCESSO!")
+    print("=" * 100)
+    
+    # Fecha a conexão
     if client:
         client.close()
+        print("Conexão com MongoDB fechada.")
 
-# Lembre-se de conferir se o nome do arquivo abaixo está igual ao seu no computador
-subir_faq_v4("Medicamento2.docx") 
+
+if __name__ == "__main__":
+    main() 
