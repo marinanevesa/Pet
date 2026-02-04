@@ -1,0 +1,73 @@
+from docx import Document
+from datetime import datetime, timezone
+import re
+import json
+
+def processar_faq(nome_arquivo):
+    doc = Document(nome_arquivo)
+    count = 0
+    faqs = []
+
+    for para in doc.paragraphs:
+        texto = para.text.strip()
+        if not texto or "P:" not in texto.upper(): 
+            continue
+
+        try:
+            # 1. Extrai as TAGS (separadas por vírgula) - vem no final antes do ponto
+            tags = "NaN"
+            tags_match = re.search(r'TAGS:\s*(.+?)\.?\s*$', texto)
+            if tags_match:
+                tags_raw = tags_match.group(1).strip().rstrip('.').rstrip(',')
+                # Divide por vírgula e retorna como lista
+                tags_list = [tag.strip() for tag in tags_raw.split(',') if tag.strip()]
+                texto = texto[:tags_match.start()].strip()
+            else:
+                tags_list = []
+
+            # 2. Extrai a FONTE (Ref: ou FONTE:)
+            fonte = "NaN"
+            fonte_match = re.search(r'\(Ref:\s*(.+?)\)|\(FONTE:\s*(.+?)\)', texto)
+            if fonte_match:
+                fonte = fonte_match.group(1) if fonte_match.group(1) else fonte_match.group(2)
+                fonte = fonte.strip()
+                texto = texto[:fonte_match.start()].strip()
+
+            # 3. Separa Pergunta (P:) e Resposta (R:)
+            partes_pr = re.split(r'\s+R:\s+', texto, flags=re.IGNORECASE)
+            if len(partes_pr) < 2:
+                continue
+                
+            pergunta = partes_pr[0].replace("P:", "").strip()
+            resposta = partes_pr[1].strip()
+
+            # Monta o documento na ordem
+            item = {
+                "question": pergunta,
+                "answer": resposta,
+                "tags": tags_list,
+                "source": fonte,
+                "category": "Medicamentos",
+                "isActive": True,
+                "updatedAt": datetime.now(timezone.utc).isoformat()
+            }
+            
+            faqs.append(item)
+            count += 1
+            
+            # Imprime cada FAQ formatado
+            print(json.dumps(item, ensure_ascii=False, indent=2))
+            print("-" * 80)
+            
+        except Exception as err:
+            print(f"Erro ao processar linha: {texto[:50]}... | Erro: {err}")
+
+    print(f"\n🚀 Total processado: {count} perguntas")
+    
+    # Imprime o JSON completo de todos os FAQs
+    print("\n" + "=" * 80)
+    print("JSON COMPLETO DE TODOS OS FAQs:")
+    print("=" * 80)
+    print(json.dumps(faqs, ensure_ascii=False, indent=2))
+
+processar_faq("medicamento.docx") 
