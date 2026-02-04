@@ -3,8 +3,31 @@ from datetime import datetime, timezone
 import re
 import json
 
-def processar_faq(nome_arquivo):
-    doc = Document(nome_arquivo)
+# ============================================================================
+# CONFIGURAÇÃO DOS ARQUIVOS
+# Para adicionar um novo arquivo: adicione uma tupla (caminho, categoria)
+# Para remover: comente ou delete a linha
+# ============================================================================
+ARQUIVOS_PROCESSAR = [
+    ("./faqs/medicamento.docx", "Medicamentos"),
+    ("./faqs/local.docx", "Local"),
+    ("./faqs/vacinas.docx", "Vacina"),
+]
+
+def processar_faq(nome_arquivo, categoria):
+    """
+    Processa um arquivo .docx e extrai as FAQs formatadas
+    
+    Args:
+        nome_arquivo: Caminho do arquivo .docx
+        categoria: Categoria a ser atribuída às FAQs deste arquivo
+    """
+    try:
+        doc = Document(nome_arquivo)
+    except Exception as e:
+        print(f"Erro ao abrir arquivo {nome_arquivo}: {e}")
+        return []
+    
     count = 0
     faqs = []
 
@@ -41,13 +64,13 @@ def processar_faq(nome_arquivo):
             pergunta = partes_pr[0].replace("P:", "").strip()
             resposta = partes_pr[1].strip()
 
-            # Monta o documento na ordem
+            # Monta o documento na ordem com a categoria recebida
             item = {
                 "question": pergunta,
                 "answer": resposta,
                 "tags": tags_list,
                 "source": fonte,
-                "category": "Medicamentos",
+                "category": categoria,
                 "isActive": True,
                 "updatedAt": datetime.now(timezone.utc).isoformat()
             }
@@ -60,14 +83,50 @@ def processar_faq(nome_arquivo):
             print("-" * 80)
             
         except Exception as err:
-            print(f"Erro ao processar linha: {texto[:50]}... | Erro: {err}")
+            print(f"⚠️ Erro ao processar linha: {texto[:50]}... | Erro: {err}")
 
-    print(f"\n🚀 Total processado: {count} perguntas")
+    print(f"\nTotal processado no arquivo: {count} perguntas")
+    return faqs
+
+
+def main():
+    """
+    Função principal que processa todos os arquivos configurados
+    """
+    print("=" * 100)
+    print("INICIANDO PROCESSAMENTO DE TODOS OS ARQUIVOS")
+    print("=" * 100 + "\n")
+    
+    todos_faqs = []
+    
+    for arquivo, categoria in ARQUIVOS_PROCESSAR:
+        print("\n" + "█" * 100)
+        print(f"PROCESSANDO: {arquivo}")
+        print(f"CATEGORIA: {categoria}")
+        print("█" * 100 + "\n")
+        
+        faqs = processar_faq(arquivo, categoria)
+        todos_faqs.extend(faqs)
+        
+        print("\n")
+    
+    # Resumo final
+    print("\n" + "=" * 100)
+    print("RESUMO FINAL")
+    print("=" * 100)
+    print(f"Total de arquivos processados: {len(ARQUIVOS_PROCESSAR)}")
+    print(f"Total de FAQs extraídas: {len(todos_faqs)}")
     
     # Imprime o JSON completo de todos os FAQs
-    print("\n" + "=" * 80)
+    print("\n" + "=" * 100)
     print("JSON COMPLETO DE TODOS OS FAQs:")
-    print("=" * 80)
-    print(json.dumps(faqs, ensure_ascii=False, indent=2))
+    print("=" * 100)
+    print(json.dumps(todos_faqs, ensure_ascii=False, indent=2))
+    print("\n" + "=" * 100)
+    print("PROCESSAMENTO CONCLUÍDO COM SUCESSO!")
+    print("=" * 100)
 
-processar_faq("medicamento.docx") 
+
+if __name__ == "__main__":
+    main()
+ 
