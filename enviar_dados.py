@@ -24,26 +24,33 @@ def subir_faq_v4(nome_arquivo):
         if not texto or "P:" not in texto.upper(): continue
 
         try:
-            # 1. Separa Pergunta e Resposta (pelo divisor R:)
+            # 1. Extrai a CATEGORIA (C:)
+            categoria = "Medicamentos"
+            if "C:" in texto:
+                partes_c = texto.split("C:")
+                categoria = partes_c[1].strip().split()[0] if partes_c[1].strip() else "Medicamentos"
+                texto = partes_c[0].strip()
+
+            # 2. Separa Pergunta e Resposta (pelo divisor R:)
             partes_pr = re.split(r'[rR]:', texto)
             pergunta = partes_pr[0].replace("P:", "").strip()
-            resto = partes_pr[1]
+            resto = partes_pr[1] if len(partes_pr) > 1 else ""
 
-            # 2. Extrai as TAGS (estão entre colchetes [ ])
+            # 3. Extrai as TAGS (estão entre colchetes [ ] ou após TAGS:)
             tags = "NaN"
-            tags_match = re.search(r'TAGS:\s*(\[.*?\])', resto)
+            tags_match = re.search(r'TAGS:\s*(\[.*?\]|[^\n()]+?)(?:\(|FONTE:|$)', resto)
             if tags_match:
-                tags = tags_match.group(1)
+                tags = tags_match.group(1).strip()
                 resto = resto.replace(tags_match.group(0), "").strip()
 
-            # 3. Extrai a FONTE (pode ser Ref: ou FONTE:)
+            # 4. Extrai a FONTE (pode ser Ref: ou FONTE:)
             fonte = "NaN"
             fonte_match = re.search(r'\(Ref: (.*?)\)|FONTE: (.*?)$', resto)
             if fonte_match:
                 fonte = fonte_match.group(1) if fonte_match.group(1) else fonte_match.group(2)
                 resto = resto.replace(str(fonte_match.group(0)), "").strip()
 
-            # 4. O que sobrou no 'resto' é a resposta limpa
+            # 5. O que sobrou no 'resto' é a resposta limpa
             resposta = resto.strip()
 
             # Monta o documento
@@ -51,7 +58,7 @@ def subir_faq_v4(nome_arquivo):
                 "question": pergunta,
                 "answer": resposta,
                 "tags": tags,
-                "category": "Medicamentos",
+                "category": categoria,
                 "source": fonte,
                 "isActive": True,
                 "updatedAt": datetime.now(timezone.utc)
