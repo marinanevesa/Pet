@@ -1,4 +1,3 @@
-from pymongo import MongoClient
 from docx import Document
 from datetime import datetime, timezone
 import re
@@ -15,23 +14,22 @@ ARQUIVOS_PROCESSAR = [
     ("./faqs/vacinas.docx", "Vacina"),
 ]
 
-uri = "mongodb+srv://marina:Ju050100@marinanevesa.rcgenti.mongodb.net/?appName=marinanevesa"
-
-def subir_faq(nome_arquivo, categoria, collection):
+def processar_faq(nome_arquivo, categoria):
     """
-    Processa um arquivo .docx e envia as FAQs para o MongoDB
+    Processa um arquivo .docx e extrai as FAQs formatadas
     
     Args:
         nome_arquivo: Caminho do arquivo .docx
         categoria: Categoria a ser atribuída às FAQs deste arquivo
-        collection: Coleção do MongoDB onde inserir os dados
     """
     try:
         doc = Document(nome_arquivo)
     except Exception as e:
         print(f"Erro ao abrir arquivo {nome_arquivo}: {e}")
-        return 0
+        return []
+    
     count = 0
+    faqs = []
 
     for para in doc.paragraphs:
         texto = para.text.strip()
@@ -66,7 +64,7 @@ def subir_faq(nome_arquivo, categoria, collection):
             pergunta = partes_pr[0].replace("P:", "").strip()
             resposta = partes_pr[1].strip()
 
-            # Monta o documento com a categoria recebida
+            # Monta o documento na ordem com a categoria recebida
             item = {
                 "question": pergunta,
                 "answer": resposta,
@@ -74,71 +72,61 @@ def subir_faq(nome_arquivo, categoria, collection):
                 "source": fonte,
                 "category": categoria,
                 "isActive": True,
-                "updatedAt": datetime.now(timezone.utc)
+                "updatedAt": datetime.now(timezone.utc).isoformat()
             }
             
-            collection.insert_one(item)
+            faqs.append(item)
             count += 1
             
+            # Imprime cada FAQ formatado
+            print(json.dumps(item, ensure_ascii=False, indent=2))
+            print("-" * 80)
+            
         except Exception as err:
-            print(f"Erro ao processar linha: {texto[:50]}... | Erro: {err}")
+            print(f"⚠️ Erro ao processar linha: {texto[:50]}... | Erro: {err}")
 
-    print(f"\nTotal inserido do arquivo: {count} perguntas")
-    return count
+    print(f"\nTotal processado no arquivo: {count} perguntas")
+    return faqs
 
 
 def main():
     """
-    Função principal que conecta ao MongoDB e processa todos os arquivos configurados
+    Função principal que processa todos os arquivos configurados
     """
     print("=" * 100)
-    print("INICIANDO ENVIO DE FAQs PARA O MONGODB")
+    print("INICIANDO PROCESSAMENTO DE TODOS OS ARQUIVOS")
     print("=" * 100 + "\n")
     
-    # Conecta ao MongoDB
-    try:
-        client = MongoClient(uri)
-        db = client['ministerio_saude']
-        collection = db['faq_medicamentos']
-        print("Conectado ao MongoDB com sucesso!")
-        
-        # Limpa a coleção antes de inserir novos dados
-        deleted_count = collection.delete_many({}).deleted_count
-        print(f"Removidos {deleted_count} documentos antigos da coleção\n")
-        
-    except Exception as e:
-        print(f"Erro ao conectar ao MongoDB: {e}")
-        return
+    todos_faqs = []
     
-    total_inseridos = 0
-    
-    # Processa cada arquivo
     for arquivo, categoria in ARQUIVOS_PROCESSAR:
         print("\n" + "█" * 100)
         print(f"PROCESSANDO: {arquivo}")
         print(f"CATEGORIA: {categoria}")
         print("█" * 100 + "\n")
         
-        count = subir_faq(arquivo, categoria, collection)
-        total_inseridos += count
+        faqs = processar_faq(arquivo, categoria)
+        todos_faqs.extend(faqs)
         
-        print()
+        print("\n")
     
     # Resumo final
     print("\n" + "=" * 100)
     print("RESUMO FINAL")
     print("=" * 100)
     print(f"Total de arquivos processados: {len(ARQUIVOS_PROCESSAR)}")
-    print(f"Total de FAQs inseridas no MongoDB: {total_inseridos}")
-    print("\n" + "=" * 100)
-    print("ENVIO CONCLUÍDO COM SUCESSO!")
-    print("=" * 100)
+    print(f"Total de FAQs extraídas: {len(todos_faqs)}")
     
-    # Fecha a conexão
-    if client:
-        client.close()
-        print("Conexão com MongoDB fechada.")
+    # Imprime o JSON completo de todos os FAQs
+    print("\n" + "=" * 100)
+    print("JSON COMPLETO DE TODOS OS FAQs:")
+    print("=" * 100)
+    print(json.dumps(todos_faqs, ensure_ascii=False, indent=2))
+    print("\n" + "=" * 100)
+    print("PROCESSAMENTO CONCLUÍDO COM SUCESSO!")
+    print("=" * 100)
 
 
 if __name__ == "__main__":
-    main() 
+    main()
+ 
