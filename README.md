@@ -2,21 +2,10 @@
 
 Script para processar arquivos .docx com perguntas e respostas e enviar para o MongoDB.
 
-## Requisitos
-
-```bash
-pip install pymongo python-docx
-```
-
 ## Como Usar
 
-1. Coloque seus arquivos .docx na pasta `faqs/`
-2. Configure os arquivos em `enviar_dados.py` na lista `ARQUIVOS_PROCESSAR`
-3. Execute o script:
-
-```bash
-python enviar_dados.py
-```
+- Instale as dependências: `pip install pymongo python-docx python-dotenv`
+- Crie um arquivo `.env` na raiz do projeto com sua URI do MongoDB
 
 ## Configuração de Arquivos
 
