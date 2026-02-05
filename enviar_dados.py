@@ -17,7 +17,8 @@ ARQUIVOS_PROCESSAR = [
     ("./faqs/medicamento.docx", "Medicamentos"),
     ("./faqs/local.docx", "Local"),
     ("./faqs/vacinas.docx", "Vacina"),
-]
+    ("./faqs/FAQACOESJUDICIAIS.docx", "Ações Judiciais"),
+    ]
 
 def subir_faq(nome_arquivo, categoria, collection):
     """
