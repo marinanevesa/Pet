@@ -13,6 +13,12 @@ ARQUIVOS_PROCESSAR = [
     ("./faqs/local.docx", "Local"),
     ("./faqs/vacinas.docx", "Vacina"),
     ("./faqs/FAQACOESJUDICIAIS.docx", "Ações Judiciais"),
+    ("./faqs/FAQCDI.docx", "CDI"),
+    ("./faqs/FAQREMOCAOINTERNA.docx", "Remoção Interna"),
+    ("./faqs/FAQREMOCAOEXTERNA.docx", "Remoção Externa"),
+    ("./faqs/FAQFARMACIADEMANIPULACAO.docx", "Farmacia de Manipulação"),
+    ("./faqs/FAQFARMACIAMUNICIPAL.docx", "Farmacia Municipal"),
+    ("./faqs/FAQUBSCITYPETROPOLIS.docx", "UBS City Petrópolis"),
 ]
 
 def processar_faq(nome_arquivo, categoria):
