@@ -8,151 +8,112 @@ from docx import Document
 
 # 1. Carrega as variáveis de ambiente
 load_dotenv()
-uri = os.getenv("MONGODB_URI")
+URI = os.getenv("MONGODB_URI")
+PASTA_FAQS = "./faqs/"
+
+import os
+import re
+import json
+from datetime import datetime, timezone
+from dotenv import load_dotenv
+from pymongo import MongoClient
+from docx import Document
 
 # ============================================================================
-# CONFIGURAÇÃO DOS ARQUIVOS
+# CONFIGURAÇÕES
 # ============================================================================
-ARQUIVOS_PROCESSAR = [
-    ("./faqs/medicamento.docx", "Medicamentos"),
-    ("./faqs/local.docx", "Local"),
-    ("./faqs/vacinas.docx", "Vacina"),
-    ("./faqs/FAQACOESJUDICIAIS.docx", "Ações Judiciais"),
-    ("./faqs/FAQCDI.docx", "CDI"),
-    ("./faqs/FAQREMOCAOINTERNA.docx", "Remoção Interna"),
-    ("./faqs/FAQREMOCAOEXTERNA.docx", "Remoção Externa"),
-    ("./faqs/FAQFARMACIADEMANIPULACAO.docx", "Farmacia de Manipulação"),
-    ("./faqs/FAQFARMACIAMUNICIPAL.docx", "Farmacia Municipal"),
-    ("./faqs/FAQUBSCITYPETROPOLIS.docx", "UBS City Petrópolis"),
-    ("./faqs/FAQNAIA.docx", "NAIA"),
-    ("./faqs/FAQPSI.docx", "PSI"),
-    ("./faqs/FAQPSR.docx", "PSR"),
-    ("./faqs/FAQUAC.docx", "UAC"),
-    ("./faqs/FAQSAUDEMENTAL.docx", "Saúde Mental"),
-    ]
 
-def subir_faq(nome_arquivo, categoria, collection):
-    """
-    Processa um arquivo .docx e envia as FAQs para o MongoDB
+def extrair_metadados(texto_bloco):
+    """Extrai Tags e Fonte isolando-as e convertendo para minúsculo"""
+    tags = []
+    fonte = ""
+
+    # 1. Extração de FONTE / Ref
+    fonte_match = re.search(r'(?:FONTE:|Ref:|\(Ref:)\s*([^)\n\t]+)', texto_bloco, re.IGNORECASE)
+    if fonte_match:
+        fonte = fonte_match.group(1).strip().rstrip('.)').lower() # toLowerCase aqui
+
+    # 2. Extração de TAGS
+    tags_match = re.search(r'TAGS:\s*(.+?)(?=\s*P:|$|\n)', texto_bloco, re.IGNORECASE)
+    if tags_match:
+        conteudo_tags = tags_match.group(1).strip().lower() # toLowerCase aqui
+        conteudo_tags = conteudo_tags.replace('#', ' ')
+        lista_bruta = [t.strip() for t in re.split(r'[,\s\t]+', conteudo_tags) if t.strip()]
+        
+        # Filtro para não deixar vazar P: ou R: como tag
+        tags = [t for t in lista_bruta if t not in ["p:", "r:", "fonte:", "ref:"]]
     
-    Args:
-        nome_arquivo: Caminho do arquivo .docx
-        categoria: Categoria a ser atribuída às FAQs deste arquivo
-        collection: Coleção do MongoDB onde inserir os dados
-    """
-    try:
-        doc = Document(nome_arquivo)
-    except Exception as e:
-        print(f"Erro ao abrir arquivo {nome_arquivo}: {e}")
-        return 0
-    count = 0
+    return tags, fonte
 
-    for para in doc.paragraphs:
-        texto = para.text.strip()
-        if not texto or "P:" not in texto.upper(): 
-            continue
-
-        try:
-            # 1. Extrai as TAGS (separadas por vírgula) - vem no final antes do ponto
-            tags = "NaN"
-            tags_match = re.search(r'TAGS:\s*(.+?)\.?\s*$', texto)
-            if tags_match:
-                tags_raw = tags_match.group(1).strip().rstrip('.').rstrip(',')
-                # Divide por vírgula e retorna como lista
-                tags_list = [tag.strip() for tag in tags_raw.split(',') if tag.strip()]
-                texto = texto[:tags_match.start()].strip()
-            else:
-                tags_list = []
-
-            # 2. Extrai a FONTE (Ref: ou FONTE:)
-            fonte = "NaN"
-            fonte_match = re.search(r'\(Ref:\s*(.+?)\)|\(FONTE:\s*(.+?)\)', texto)
-            if fonte_match:
-                fonte = fonte_match.group(1) if fonte_match.group(1) else fonte_match.group(2)
-                fonte = fonte.strip()
-                texto = texto[:fonte_match.start()].strip()
-
-            # 3. Separa Pergunta (P:) e Resposta (R:)
-            partes_pr = re.split(r'\s+R:\s+', texto, flags=re.IGNORECASE)
-            if len(partes_pr) < 2:
-                continue
+def processar_faqs(collection):
+    total = 0
+    for raiz, _, arquivos in os.walk(PASTA_FAQS):
+        for nome_arquivo in arquivos:
+            if nome_arquivo.endswith('.docx') and not nome_arquivo.startswith('~$'):
+                caminho = os.path.join(raiz, nome_arquivo)
+                doc = Document(caminho)
                 
-            pergunta = partes_pr[0].replace("P:", "").strip()
-            resposta = partes_pr[1].strip()
+                # Categoria inicial em minúsculo
+                categoria_atual = nome_arquivo.replace("FAQ", "").replace(".docx", "").strip().lower()
+                paragrafos = [p.text.strip() for p in doc.paragraphs if p.text.strip()]
+                
+                pergunta_pendente = ""
+                
+                for i, linha in enumerate(paragrafos):
+                    if "[ASSUNTO:" in linha.upper():
+                        assunto_match = re.search(r'\[ASSUNTO:\s*(.+?)\]', linha, re.IGNORECASE)
+                        if assunto_match: 
+                            categoria_atual = assunto_match.group(1).strip().lower() # toLowerCase aqui
+                        continue
 
-            # Monta o documento com a categoria recebida
-            item = {
-                "question": pergunta,
-                "answer": resposta,
-                "tags": tags_list,
-                "source": fonte,
-                "category": categoria,
-                "isActive": True,
-                "updatedAt": datetime.now(timezone.utc)
-            }
-            
-            collection.insert_one(item)
-            count += 1
-            
-        except Exception as err:
-            print(f"Erro ao processar linha: {texto[:50]}... | Erro: {err}")
+                    pergunta, resposta = None, None
 
-    print(f"\nTotal inserido do arquivo: {count} perguntas")
-    return count
+                    # Caso A: P e R na mesma linha
+                    if "P:" in linha.upper() and "R:" in linha.upper():
+                        partes = re.split(r'\s*R:\s*', linha, flags=re.IGNORECASE)
+                        pergunta = partes[0].replace("P:", "").replace("p:", "").strip().lower()
+                        resposta = partes[1].strip().lower()
+                        resposta = re.split(r'tags:|fonte:|ref:', resposta, flags=re.IGNORECASE)[0].strip()
 
+                    # Caso B: Linhas separadas (UPA Anita)
+                    elif linha.upper().startswith("P:"):
+                        pergunta_pendente = linha.replace("P:", "").replace("p:", "").strip().lower()
+                        continue
+                    elif linha.upper().startswith("R:") and pergunta_pendente:
+                        pergunta = pergunta_pendente
+                        resposta = linha.replace("R:", "").replace("r:", "").strip().lower()
+                        resposta = re.split(r'tags:|fonte:|ref:', resposta, flags=re.IGNORECASE)[0].strip()
+                        pergunta_pendente = ""
+
+                    if pergunta and resposta:
+                        bloco_contexto = " ".join(paragrafos[i:i+2])
+                        tags, fonte = extrair_metadados(bloco_contexto)
+
+                        collection.insert_one({
+                            "question": pergunta,
+                            "answer": resposta,
+                            "tags": tags,
+                            "source": fonte,
+                            "category": categoria_atual,
+                            "isActive": True,
+                            "updatedAt": datetime.now(timezone.utc)
+                        })
+                        total += 1
+    return total
 
 def main():
-    """
-    Função principal que conecta ao MongoDB e processa todos os arquivos configurados
-    """
-    print("=" * 100)
-    print("INICIANDO ENVIO DE FAQs PARA O MONGODB")
-    print("=" * 100 + "\n")
-    
-    # Conecta ao MongoDB
     try:
-        client = MongoClient(uri)
+        client = MongoClient(URI)
         db = client['ministerio_saude']
-        collection = db['faq_medicamentos']
-        print("Conectado ao MongoDB com sucesso!")
+        col = db['faq_medicamentos']
+        col.delete_many({}) # Limpa para o novo padrão minúsculo
         
-        # Limpa a coleção antes de inserir novos dados
-        deleted_count = collection.delete_many({}).deleted_count
-        print(f"Removidos {deleted_count} documentos antigos da coleção\n")
-        
-    except Exception as e:
-        print(f"Erro ao conectar ao MongoDB: {e}")
-        return
-    
-    total_inseridos = 0
-    
-    # Processa cada arquivo
-    for arquivo, categoria in ARQUIVOS_PROCESSAR:
-        print("\n" + "█" * 100)
-        print(f"PROCESSANDO: {arquivo}")
-        print(f"CATEGORIA: {categoria}")
-        print("█" * 100 + "\n")
-        
-        count = subir_faq(arquivo, categoria, collection)
-        total_inseridos += count
-        
-        print()
-    
-    # Resumo final
-    print("\n" + "=" * 100)
-    print("RESUMO FINAL")
-    print("=" * 100)
-    print(f"Total de arquivos processados: {len(ARQUIVOS_PROCESSAR)}")
-    print(f"Total de FAQs inseridas no MongoDB: {total_inseridos}")
-    print("\n" + "=" * 100)
-    print("ENVIO CONCLUÍDO COM SUCESSO!")
-    print("=" * 100)
-    
-    # Fecha a conexão
-    if client:
+        print("Iniciando upload...")
+        total = processar_faqs(col)
+        print(f"Sucesso! {total} documentos padronizados inseridos.")
         client.close()
-        print("Conexão com MongoDB fechada.")
-
+    except Exception as e:
+        print(f"Erro: {e}")
 
 if __name__ == "__main__":
-    main() 
+    main()
