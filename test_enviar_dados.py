@@ -34,6 +34,15 @@ ARQUIVOS_PROCESSAR = [
     ("./faqs/FAQUBSSAOSEBASTIAO.docx", "UBS São Sebastião"),
     ("./faqs/FAQUPAAEROPORTO.docx", "UPA Aeroporto"),
     ("./faqs/FAQUPAANITA.docx", "UPA Anita"),
+    ("./faqs/FAQUBSLEPORACE.docx", "UBS Leporace"),
+    ("./faqs/FAQUBSLUIZA.docx", "UBS Luiza"),
+    ("./faqs/FAQUBSPAINEIRAS.docx", "UBS Paineiras"),
+    ("./faqs/FAQUBSPALMA.docx", "UBS Palma"),
+    ("./faqs/FAQUBSPAULISTA.docx", "UBS Paulista"),
+    ("./faqs/FAQUBSPAULISTANO.docx", "UBS Paulistano"),
+    ("./faqs/FAQUBSPLANALTO.docx", "UBS Planalto"),
+    ("./faqs/FAQUBSPROGRESSO.docx", "UBS Progresso"),
+    ("./faqs/FAQUBSSANTACLARA.docx", "UBS Santa Clara"),
 ]
 
 def processar_faq(nome_arquivo, categoria):
