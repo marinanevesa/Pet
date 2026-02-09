@@ -29,6 +29,11 @@ ARQUIVOS_PROCESSAR = [
     ("./faqs/FAQCAPSIIIFLORESCER.docx", "CAPS III Florescer"),
     ("./faqs/FAQCASADODIABETICO.docx", "Casa do Diabético"),
     ("./faqs/FAQCAPSADIIIRENASCER.docx", "CAPS AD III Renascer"),
+    ("./faqs/FAQAGAR.docx", "AGAR"),
+    ("./faqs/FAQUBSSANTATEREZINHA.docx", "UBS Santa Terezinha"),
+    ("./faqs/FAQUBSSAOSEBASTIAO.docx", "UBS São Sebastião"),
+    ("./faqs/FAQUPAAEROPORTO.docx", "UPA Aeroporto"),
+    ("./faqs/FAQUPAANITA.docx", "UPA Anita"),
 ]
 
 def processar_faq(nome_arquivo, categoria):
