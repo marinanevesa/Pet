@@ -108,7 +108,7 @@ def main():
         col = db['faq_medicamentos']
         col.delete_many({}) # Limpa para o novo padrão minúsculo
         
-        print("Iniciando upload...")
+        print("Iniciando upload com padrão toLowerCase...")
         total = processar_faqs(col)
         print(f"Sucesso! {total} documentos padronizados inseridos.")
         client.close()
