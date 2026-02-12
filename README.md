@@ -110,4 +110,4 @@ Para que o script reconheça as informações, os documentos no Drive devem segu
 
 ### Gostaria que eu fizesse alguma alteração específica?
 
-Por exemplo, eu posso adicionar uma seção sobre como configurar o **Google Cloud Console** passo a passo, caso outra pessoa da equipe precise configurar do zero. Seria útil?
+Por exemplo, eu posso adicionar uma seção sobre como configurar o **Google Cloud Console** passo a passo, caso outra pessoa da equipe precise configurar do zero. Seria útil?eu 

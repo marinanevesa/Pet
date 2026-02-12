@@ -1,0 +1,297 @@
+2026-02-12 14:47:52,161 [INFO] 🚀 INICIANDO SINCRONIZADOR INTELIGENTE (MODO INCREMENTAL)
+2026-02-12 14:47:52,224 [INFO] file_cache is only supported with oauth2client<4.0.0
+2026-02-12 14:47:54,449 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO CLONIDINA 0.10 MG (Comprimido).docx
+2026-02-12 14:47:55,398 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:47:55,419 [INFO] 🔄 Atualizando: FAQ PROCEDIMENTOS.docx
+2026-02-12 14:47:59,041 [INFO]    ✔️ Sucesso: 551 itens sincronizados.
+2026-02-12 14:47:59,063 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ÓLEO MINERAL PURO (Frasco 100ml).docx
+2026-02-12 14:48:00,097 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:48:00,122 [INFO] 🔄 Atualizando: FAQ UPA AEROPORTO.docx
+2026-02-12 14:48:01,103 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:48:01,127 [INFO] 🔄 Atualizando: FAQ CDI.docx
+2026-02-12 14:48:01,967 [INFO]    ✔️ Sucesso: 4 itens sincronizados.
+2026-02-12 14:48:01,989 [INFO] 🔄 Atualizando: FAQ REMOCAO INTERNA.docx
+2026-02-12 14:48:02,957 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:03,022 [INFO] 🔄 Atualizando: FAQ ACOES JUDICIAIS.docx
+2026-02-12 14:48:04,110 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:04,134 [INFO] 🔄 Atualizando: FAQ REMOCAO EXTERNA.docx
+2026-02-12 14:48:05,014 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:05,040 [INFO] 🔄 Atualizando: FAQ UBS CITY PETROPOLIS.docx
+2026-02-12 14:48:06,410 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:06,433 [INFO] 🔄 Atualizando: FAQ FARMACIA MUNICIPAL.docx
+2026-02-12 14:48:07,233 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:07,252 [INFO] 🔄 Atualizando: FAQ FARMACIA DE MANIPULACAO.docx
+2026-02-12 14:48:08,545 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:08,576 [INFO] 🔄 Atualizando: FAQ PSI.docx
+2026-02-12 14:48:09,359 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:09,380 [INFO] 🔄 Atualizando: FAQ PSR.docx
+2026-02-12 14:48:10,199 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:10,222 [INFO] 🔄 Atualizando: FAQ NAIA.docx
+2026-02-12 14:48:11,208 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:11,232 [INFO] 🔄 Atualizando: FAQ SAUDE MENTAL.docx
+2026-02-12 14:48:12,177 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:12,198 [INFO] 🔄 Atualizando: FAQ UAC.docx
+2026-02-12 14:48:13,091 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:13,117 [INFO] 🔄 Atualizando: FAQ NGA16.docx
+2026-02-12 14:48:14,975 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:15,000 [INFO] 🔄 Atualizando: FAQ CENTRO OFTALMOLOGICO.docx
+2026-02-12 14:48:16,159 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:16,190 [INFO] 🔄 Atualizando: FAQ CASA DO DIABETICO.docx
+2026-02-12 14:48:16,959 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:16,983 [INFO] 🔄 Atualizando: FAQ CAPS AD III RENASCER.docx
+2026-02-12 14:48:17,752 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:17,776 [INFO] 🔄 Atualizando: FAQ CAPS III FLORESCER.docx
+2026-02-12 14:48:18,665 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:18,935 [INFO] 🔄 Atualizando: FAQ AGAR.docx
+2026-02-12 14:48:20,504 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:48:20,527 [INFO] 🔄 Atualizando: FAQ UPA ANITA.docx
+2026-02-12 14:48:21,355 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:21,382 [INFO] 🔄 Atualizando: FAQ UBS SAO SEBASTIAO.docx
+2026-02-12 14:48:22,177 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:22,198 [INFO] 🔄 Atualizando: FAQ UBS SANTA TEREZINHA.docx
+2026-02-12 14:48:22,965 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:22,987 [INFO] 🔄 Atualizando: FAQ UBS SANTA CLARA.docx
+2026-02-12 14:48:23,833 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:23,854 [INFO] 🔄 Atualizando: FAQ UBS PROGRESSO.docx
+2026-02-12 14:48:24,581 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:24,602 [INFO] 🔄 Atualizando: FAQ UBS PLANALTO.docx
+2026-02-12 14:48:27,255 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:27,277 [INFO] 🔄 Atualizando: FAQ UBS PAULISTANO.docx
+2026-02-12 14:48:28,208 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:28,230 [INFO] 🔄 Atualizando: FAQ UBS PAULISTA.docx
+2026-02-12 14:48:29,033 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:29,052 [INFO] 🔄 Atualizando: FAQ UBS PALMA.docx
+2026-02-12 14:48:29,887 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:29,908 [INFO] 🔄 Atualizando: FAQ UBS PAINEIRAS.docx
+2026-02-12 14:48:31,001 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:31,023 [INFO] 🔄 Atualizando: FAQ UBS LUIZA.docx
+2026-02-12 14:48:31,802 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:31,827 [INFO] 🔄 Atualizando: FAQ UBS LEPORACE.docx
+2026-02-12 14:48:32,729 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:33,027 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ISOSSORBIDA, SAL DINITRATO 5 MG (Comprimido Sublingual).docx
+2026-02-12 14:48:34,183 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:48:34,213 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO MELILOTUS OFFICINALIS + CUMARINA (Manipulado).docx
+2026-02-12 14:48:35,132 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:35,397 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ISOSSORBIDA (DINITRATO) 10 MG.docx
+2026-02-12 14:48:36,640 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:48:36,905 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO DIGOXINA 0.25 MG (Comprimido).docx
+2026-02-12 14:48:38,024 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:48:38,049 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO AMIODARONA 200 MG (Comprimido).docx
+2026-02-12 14:48:39,112 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:48:39,132 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO PENTOXIFILINA 400MG (Comprimido).docx
+2026-02-12 14:48:40,802 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:48:40,832 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO RUTINA 100MG + CASTANHA DA ÍNDIA 300MG (Manipulado).docx
+2026-02-12 14:48:41,708 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:48:41,728 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO SULFATO FERROSO 40MG (FE ELEMENTAR). COMPRIMIDO.docx
+2026-02-12 14:48:42,945 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:48:43,240 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO SULFATO FERROSO 25 MG FE ELEMENTAR ML (Frasco 30ml).docx
+2026-02-12 14:48:44,124 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:44,148 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ÁCIDO FÓLICO 5 MG COMPRIMIDO.docx
+2026-02-12 14:48:45,035 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:45,057 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO VARFARINA SODICA 5MG COMPRIMIDO CÁPSULA (NGA).docx
+2026-02-12 14:48:45,888 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:45,912 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ÁCIDO ACETILSALICÍLICO 100 MG COMPRIMIDO.docx
+2026-02-12 14:48:46,899 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:46,922 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO VITAMINAS DO COMPLEXO B, B1, B2, B3, B5, B6 DRÁGEA.docx
+2026-02-12 14:48:47,806 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:47,827 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO TIAMINA. CLORIDRATO 300 MG COMPRIMIDO.docx
+2026-02-12 14:48:48,795 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:48,826 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO SAIS REIDRATACAO ORAL, ENVELOPE.docx
+2026-02-12 14:48:49,604 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:49,627 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO POLIVITAMINICO GOTAS. FRASCO 30ML.docx
+2026-02-12 14:48:50,635 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:48:50,657 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO MULTIVITAMINAS, ASSOCIADAS COM SAIS MINERAIS COMPRIMIDO.docx
+2026-02-12 14:48:52,176 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:52,198 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO CARBONATO DE CÁLCIO 500MG + VITAMINA D3 400 UI (MANIPULADO) CÁPSULA.docx
+2026-02-12 14:48:53,217 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:53,238 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO CARBONATO DE CÁLCIO 500MG + VITAMINA D 200 UI (MANIPULADO) CÁPSULA.docx
+2026-02-12 14:48:54,103 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:54,132 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO CARBONATO DE CÁLCIO 500MG (MANIPULADO) CÁPSULA.docx
+2026-02-12 14:48:55,255 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:48:55,274 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO METFORMINA 850 MG COMPRIMIDO.docx
+2026-02-12 14:48:56,385 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:48:56,407 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO INSULINA HUMANA REGULAR 100 UI ML (Frasco 10ml).docx
+2026-02-12 14:48:57,373 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:48:57,404 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO INSULINA HUMANA NPH (Frasco 10ml).docx
+2026-02-12 14:49:00,166 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:49:00,191 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO GLIBENCLAMIDA 5 MG (Comprimido).docx
+2026-02-12 14:49:00,996 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:49:01,018 [INFO] 🔄 Atualizando: FAQ UBS HORTO.docx
+2026-02-12 14:49:01,784 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:49:01,805 [INFO] 🔄 Atualizando: FAQ UBS GUANABARA.docx
+2026-02-12 14:49:02,731 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:49:02,753 [INFO] 🔄 Atualizando: FAQ UBS ESTACAO.docx
+2026-02-12 14:49:03,832 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:49:03,852 [INFO] 🔄 Atualizando: FAQ UBS ESMERALDA.docx
+2026-02-12 14:49:04,832 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:49:04,871 [INFO] 🔄 Atualizando: FAQ UBS BRASILANDIA.docx
+2026-02-12 14:49:06,105 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:49:06,126 [INFO] 🔄 Atualizando: FAQ UBS ANGELA ROSA.docx
+2026-02-12 14:49:07,279 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:49:07,304 [INFO] 🔄 Atualizando: FAQ UBS AERO 3.docx
+2026-02-12 14:49:08,340 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:49:08,361 [INFO] 🔄 Atualizando: FAQ UBS AERO 1.docx
+2026-02-12 14:49:09,184 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:49:09,207 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO HIOSCINA 10 MG (Escopolamina).docx
+2026-02-12 14:49:10,037 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:49:10,057 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO DIMETICONA 75MG ML (Solução Oral).docx
+2026-02-12 14:49:11,497 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:49:11,525 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO RANITIDINA 150 MG.docx
+2026-02-12 14:49:12,656 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:49:12,680 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO OMEPRAZOL 20MG.docx
+2026-02-12 14:49:13,483 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:49:13,511 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO HIDRÓXIDO DE ALUMÍNIO (Suspensão Oral).docx
+2026-02-12 14:49:14,358 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:49:57,413 [INFO] 🚀 INICIANDO SINCRONIZADOR INTELIGENTE (MODO INCREMENTAL)
+2026-02-12 14:49:57,461 [INFO] file_cache is only supported with oauth2client<4.0.0
+2026-02-12 14:55:38,051 [INFO] 🚀 INICIANDO SINCRONIZADOR INTELIGENTE (MODO INCREMENTAL)
+2026-02-12 14:55:38,127 [INFO] file_cache is only supported with oauth2client<4.0.0
+2026-02-12 14:56:27,120 [INFO] 🚀 INICIANDO SINCRONIZADOR INTELIGENTE (MODO INCREMENTAL)
+2026-02-12 14:56:27,165 [INFO] file_cache is only supported with oauth2client<4.0.0
+2026-02-12 14:56:33,787 [INFO] 🚀 INICIANDO SINCRONIZADOR INTELIGENTE (MODO INCREMENTAL)
+2026-02-12 14:56:33,833 [INFO] file_cache is only supported with oauth2client<4.0.0
+2026-02-12 14:59:03,864 [INFO] 🚀 INICIANDO SINCRONIZADOR INTELIGENTE (MODO INCREMENTAL)
+2026-02-12 14:59:03,920 [INFO] file_cache is only supported with oauth2client<4.0.0
+2026-02-12 14:59:05,994 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO CLONIDINA 0.10 MG (Comprimido).docx
+2026-02-12 14:59:07,157 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:59:07,173 [INFO] 🔄 Atualizando: FAQ PROCEDIMENTOS.docx
+2026-02-12 14:59:08,728 [WARNING]   ⚠️ Pergunta detectada na linha 2010 de 'FAQ PROCEDIMENTOS.docx' ficou sem resposta (R:).
+2026-02-12 14:59:10,787 [INFO]    ✔️ Sucesso: 551 itens sincronizados.
+2026-02-12 14:59:10,802 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ÓLEO MINERAL PURO (Frasco 100ml).docx
+2026-02-12 14:59:11,761 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:59:11,780 [INFO] 🔄 Atualizando: FAQ UPA AEROPORTO.docx
+2026-02-12 14:59:12,579 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:59:12,596 [INFO] 🔄 Atualizando: FAQ CDI.docx
+2026-02-12 14:59:13,487 [INFO]    ✔️ Sucesso: 4 itens sincronizados.
+2026-02-12 14:59:13,503 [INFO] 🔄 Atualizando: FAQ REMOCAO INTERNA.docx
+2026-02-12 14:59:14,483 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:14,501 [INFO] 🔄 Atualizando: FAQ ACOES JUDICIAIS.docx
+2026-02-12 14:59:15,270 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:15,290 [INFO] 🔄 Atualizando: FAQ REMOCAO EXTERNA.docx
+2026-02-12 14:59:16,178 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:16,196 [INFO] 🔄 Atualizando: FAQ UBS CITY PETROPOLIS.docx
+2026-02-12 14:59:17,086 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:17,102 [INFO] 🔄 Atualizando: FAQ FARMACIA MUNICIPAL.docx
+2026-02-12 14:59:17,770 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:17,805 [INFO] 🔄 Atualizando: FAQ FARMACIA DE MANIPULACAO.docx
+2026-02-12 14:59:18,670 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:18,689 [INFO] 🔄 Atualizando: FAQ PSI.docx
+2026-02-12 14:59:19,781 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:19,799 [INFO] 🔄 Atualizando: FAQ PSR.docx
+2026-02-12 14:59:20,662 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:20,678 [INFO] 🔄 Atualizando: FAQ NAIA.docx
+2026-02-12 14:59:21,414 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:21,430 [INFO] 🔄 Atualizando: FAQ SAUDE MENTAL.docx
+2026-02-12 14:59:22,389 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:22,413 [INFO] 🔄 Atualizando: FAQ UAC.docx
+2026-02-12 14:59:23,142 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:23,163 [INFO] 🔄 Atualizando: FAQ NGA16.docx
+2026-02-12 14:59:23,882 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:23,897 [INFO] 🔄 Atualizando: FAQ CENTRO OFTALMOLOGICO.docx
+2026-02-12 14:59:24,879 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:24,894 [INFO] 🔄 Atualizando: FAQ CASA DO DIABETICO.docx
+2026-02-12 14:59:25,612 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:25,634 [INFO] 🔄 Atualizando: FAQ CAPS AD III RENASCER.docx
+2026-02-12 14:59:26,336 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:26,353 [INFO] 🔄 Atualizando: FAQ CAPS III FLORESCER.docx
+2026-02-12 14:59:27,089 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:27,106 [INFO] 🔄 Atualizando: FAQ AGAR.docx
+2026-02-12 14:59:28,058 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:59:28,074 [INFO] 🔄 Atualizando: FAQ UPA ANITA.docx
+2026-02-12 14:59:28,854 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:28,869 [INFO] 🔄 Atualizando: FAQ UBS SAO SEBASTIAO.docx
+2026-02-12 14:59:29,611 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:29,634 [INFO] 🔄 Atualizando: FAQ UBS SANTA TEREZINHA.docx
+2026-02-12 14:59:30,434 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:30,451 [INFO] 🔄 Atualizando: FAQ UBS SANTA CLARA.docx
+2026-02-12 14:59:31,522 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:31,539 [INFO] 🔄 Atualizando: FAQ UBS PROGRESSO.docx
+2026-02-12 14:59:32,450 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:32,470 [INFO] 🔄 Atualizando: FAQ UBS PLANALTO.docx
+2026-02-12 14:59:33,237 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:33,262 [INFO] 🔄 Atualizando: FAQ UBS PAULISTANO.docx
+2026-02-12 14:59:34,185 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:34,205 [INFO] 🔄 Atualizando: FAQ UBS PAULISTA.docx
+2026-02-12 14:59:34,968 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:34,988 [INFO] 🔄 Atualizando: FAQ UBS PALMA.docx
+2026-02-12 14:59:36,001 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:36,018 [INFO] 🔄 Atualizando: FAQ UBS PAINEIRAS.docx
+2026-02-12 14:59:36,900 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:36,918 [INFO] 🔄 Atualizando: FAQ UBS LUIZA.docx
+2026-02-12 14:59:37,650 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:37,667 [INFO] 🔄 Atualizando: FAQ UBS LEPORACE.docx
+2026-02-12 14:59:38,636 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:38,654 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ISOSSORBIDA, SAL DINITRATO 5 MG (Comprimido Sublingual).docx
+2026-02-12 14:59:39,584 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:59:39,601 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO MELILOTUS OFFICINALIS + CUMARINA (Manipulado).docx
+2026-02-12 14:59:40,271 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:40,291 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ISOSSORBIDA (DINITRATO) 10 MG.docx
+2026-02-12 14:59:41,171 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:59:41,186 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO DIGOXINA 0.25 MG (Comprimido).docx
+2026-02-12 14:59:42,113 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:59:42,129 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO AMIODARONA 200 MG (Comprimido).docx
+2026-02-12 14:59:42,890 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:59:42,908 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO PENTOXIFILINA 400MG (Comprimido).docx
+2026-02-12 14:59:43,695 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 14:59:43,713 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO RUTINA 100MG + CASTANHA DA ÍNDIA 300MG (Manipulado).docx
+2026-02-12 14:59:44,460 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 14:59:44,477 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO SULFATO FERROSO 40MG (FE ELEMENTAR). COMPRIMIDO.docx
+2026-02-12 14:59:45,552 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:59:45,569 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO SULFATO FERROSO 25 MG FE ELEMENTAR ML (Frasco 30ml).docx
+2026-02-12 14:59:46,390 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:46,406 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ÁCIDO FÓLICO 5 MG COMPRIMIDO.docx
+2026-02-12 14:59:47,177 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:47,193 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO VARFARINA SODICA 5MG COMPRIMIDO CÁPSULA (NGA).docx
+2026-02-12 14:59:48,082 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:48,098 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO ÁCIDO ACETILSALICÍLICO 100 MG COMPRIMIDO.docx
+2026-02-12 14:59:49,618 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:49,635 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO VITAMINAS DO COMPLEXO B, B1, B2, B3, B5, B6 DRÁGEA.docx
+2026-02-12 14:59:50,596 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:50,612 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO TIAMINA. CLORIDRATO 300 MG COMPRIMIDO.docx
+2026-02-12 14:59:51,577 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:51,594 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO SAIS REIDRATACAO ORAL, ENVELOPE.docx
+2026-02-12 14:59:52,407 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:52,426 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO POLIVITAMINICO GOTAS. FRASCO 30ML.docx
+2026-02-12 14:59:53,196 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 14:59:53,300 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO MULTIVITAMINAS, ASSOCIADAS COM SAIS MINERAIS COMPRIMIDO.docx
+2026-02-12 14:59:54,355 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:54,372 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO CARBONATO DE CÁLCIO 500MG + VITAMINA D3 400 UI (MANIPULADO) CÁPSULA.docx
+2026-02-12 14:59:55,352 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:55,369 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO CARBONATO DE CÁLCIO 500MG + VITAMINA D 200 UI (MANIPULADO) CÁPSULA.docx
+2026-02-12 14:59:56,282 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:56,301 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO CARBONATO DE CÁLCIO 500MG (MANIPULADO) CÁPSULA.docx
+2026-02-12 14:59:57,151 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:59:57,170 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO METFORMINA 850 MG COMPRIMIDO.docx
+2026-02-12 14:59:57,922 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:59:57,940 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO INSULINA HUMANA REGULAR 100 UI ML (Frasco 10ml).docx
+2026-02-12 14:59:58,966 [INFO]    ✔️ Sucesso: 8 itens sincronizados.
+2026-02-12 14:59:58,983 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO INSULINA HUMANA NPH (Frasco 10ml).docx
+2026-02-12 14:59:59,750 [INFO]    ✔️ Sucesso: 9 itens sincronizados.
+2026-02-12 14:59:59,766 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO GLIBENCLAMIDA 5 MG (Comprimido).docx
+2026-02-12 15:00:00,552 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 15:00:00,569 [INFO] 🔄 Atualizando: FAQ UBS HORTO.docx
+2026-02-12 15:00:01,318 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 15:00:01,334 [INFO] 🔄 Atualizando: FAQ UBS GUANABARA.docx
+2026-02-12 15:00:02,250 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 15:00:02,272 [INFO] 🔄 Atualizando: FAQ UBS ESTACAO.docx
+2026-02-12 15:00:03,119 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 15:00:03,136 [INFO] 🔄 Atualizando: FAQ UBS ESMERALDA.docx
+2026-02-12 15:00:04,091 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 15:00:04,118 [INFO] 🔄 Atualizando: FAQ UBS BRASILANDIA.docx
+2026-02-12 15:00:05,037 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 15:00:05,055 [INFO] 🔄 Atualizando: FAQ UBS ANGELA ROSA.docx
+2026-02-12 15:00:05,979 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 15:00:05,997 [INFO] 🔄 Atualizando: FAQ UBS AERO 3.docx
+2026-02-12 15:00:06,858 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 15:00:06,876 [INFO] 🔄 Atualizando: FAQ UBS AERO 1.docx
+2026-02-12 15:00:07,582 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
+2026-02-12 15:00:07,600 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO HIOSCINA 10 MG (Escopolamina).docx
+2026-02-12 15:00:08,344 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 15:00:08,366 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO DIMETICONA 75MG ML (Solução Oral).docx
+2026-02-12 15:00:09,399 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 15:00:09,415 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO RANITIDINA 150 MG.docx
+2026-02-12 15:00:10,210 [INFO]    ✔️ Sucesso: 5 itens sincronizados.
+2026-02-12 15:00:10,225 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO OMEPRAZOL 20MG.docx
+2026-02-12 15:00:10,955 [INFO]    ✔️ Sucesso: 6 itens sincronizados.
+2026-02-12 15:00:10,972 [INFO] 🔄 Atualizando: FAQ  MEDICAMENTO HIDRÓXIDO DE ALUMÍNIO (Suspensão Oral).docx
+2026-02-12 15:00:11,741 [INFO]    ✔️ Sucesso: 7 itens sincronizados.
