@@ -105,9 +105,3 @@ Para que o script reconheça as informações, os documentos no Drive devem segu
 ### ⚠️ Aviso de Segurança
 
 > As chaves de API e senhas foram removidas deste repositório por segurança. Caso tenha exposto sua `private_key` no histórico do Git, revogue-a imediatamente no console do Google Cloud.
-
----
-
-### Gostaria que eu fizesse alguma alteração específica?
-
-Por exemplo, eu posso adicionar uma seção sobre como configurar o **Google Cloud Console** passo a passo, caso outra pessoa da equipe precise configurar do zero. Seria útil?eu 
