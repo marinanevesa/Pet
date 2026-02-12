@@ -28,26 +28,28 @@ def get_drive_service():
     return build('drive', 'v3', credentials=creds)
 
 def extrair_metadados(texto_bloco):
+    """
+    Extrai tags e fontes de um bloco de texto.
+    """
     tags = []
     fonte = ""
+    
     fonte_match = re.search(r'(?:FONTE:|Ref:|\(Ref:)\s*([^)\n\t]+)', texto_bloco, re.IGNORECASE)
     if fonte_match:
         fonte = fonte_match.group(1).strip().rstrip('.)').lower()
 
-    tags_match = re.search(r'TAGS:\s*(.+?)(?=\s*P:|$|\n)', texto_bloco, re.IGNORECASE)
+    tags_match = re.search(r'TAGS:\s*(.+?)(?=\s*P:|\s*PERGUNTA:|$|\n)', texto_bloco, re.IGNORECASE)
     if tags_match:
         conteudo_tags = tags_match.group(1).strip().lower()
         conteudo_tags = conteudo_tags.replace('#', ' ')
         lista_bruta = [t.strip() for t in re.split(r'[,\s\t]+', conteudo_tags) if t.strip()]
-        tags = [t for t in lista_bruta if t not in ["p:", "r:", "fonte:", "ref:"]]
+        tags = [t for t in lista_bruta if t not in ["p:", "r:", "pergunta:", "resposta:", "fonte:", "ref:"]]
     
     return tags, fonte
 
 def processar_faqs_drive(collection):
     service = get_drive_service()
     total_geral = 0
-    # Dicionário para rastrear o par (pergunta, resposta) e o nome do arquivo
-    pares_vistos = {} 
 
     query = f"'{ID_PASTA_DRIVE}' in parents and name contains '.docx' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'"
     results = service.files().list(q=query, fields="files(id, name)").execute()
@@ -61,6 +63,7 @@ def processar_faqs_drive(collection):
         file_id = arquivo['id']
         nome_arquivo = arquivo['name']
         
+        # Ignora arquivos temporários do Word
         if nome_arquivo.startswith('~$'): continue
 
         request = service.files().get_media(fileId=file_id)
@@ -79,44 +82,37 @@ def processar_faqs_drive(collection):
         pergunta_pendente = ""
         
         for i, linha in enumerate(paragrafos):
-            if "[ASSUNTO:" in linha.upper():
-                assunto_match = re.search(r'\[ASSUNTO:\s*(.+?)\]', linha, re.IGNORECASE)
-                if assunto_match: 
-                    categoria_atual = assunto_match.group(1).strip().lower()
-                continue
+            # --- DETECÇÃO DE NOVO ASSUNTO ---
+            assunto_match = re.search(r'\[ASSUNTO:\s*(.+?)\]', linha, re.IGNORECASE)
+            if assunto_match: 
+                categoria_atual = assunto_match.group(1).strip().lower()
+                if re.fullmatch(r'(\d+\.\s*)?\[ASSUNTO:.*?\]', linha, re.IGNORECASE):
+                    continue
 
             pergunta, resposta = None, None
 
-            # Caso A: P e R na mesma linha
-            if "P:" in linha.upper() and "R:" in linha.upper():
-                partes = re.split(r'\s*R:\s*', linha, flags=re.IGNORECASE)
-                pergunta = partes[0].replace("P:", "").replace("p:", "").strip().lower()
-                resposta_bruta = partes[1].strip().lower()
-                resposta = re.split(r'tags:|fonte:|ref:', resposta_bruta, flags=re.IGNORECASE)[0].strip()
+            # --- CASO A: P e R na mesma linha ---
+            if re.search(r'\b(P|PERGUNTA):\s*', linha, re.IGNORECASE) and re.search(r'\b(R|RESPOSTA):\s*', linha, re.IGNORECASE):
+                partes = re.split(r'\s*\b(R|RESPOSTA):\s*', linha, flags=re.IGNORECASE)
+                pergunta = re.sub(r'(\d+\.\s*)?\b(P|PERGUNTA):\s*', '', partes[0], flags=re.IGNORECASE).strip().lower()
+                resposta_bruta = partes[2].strip().lower()
+                resposta = re.split(r'tags:|fonte:|ref:|\(ref:', resposta_bruta, flags=re.IGNORECASE)[0].strip()
 
-            # Caso B: Linhas separadas
-            elif linha.upper().startswith("P:"):
-                pergunta_pendente = linha.replace("P:", "").replace("p:", "").strip().lower()
+            # --- CASO B: Linhas separadas ---
+            elif re.search(r'^(\d+\.\s*)?\b(P|PERGUNTA):\s*', linha, re.IGNORECASE):
+                pergunta_pendente = re.sub(r'^(\d+\.\s*)?\b(P|PERGUNTA):\s*', '', linha, flags=re.IGNORECASE).strip().lower()
                 continue
-            elif linha.upper().startswith("R:") and pergunta_pendente:
+
+            elif re.search(r'^\b(R|RESPOSTA):\s*', linha, re.IGNORECASE) and pergunta_pendente:
                 pergunta = pergunta_pendente
-                resposta_bruta = linha.replace("R:", "").replace("r:", "").strip().lower()
-                resposta = re.split(r'tags:|fonte:|ref:', resposta_bruta, flags=re.IGNORECASE)[0].strip()
+                resposta_bruta = re.sub(r'^\b(R|RESPOSTA):\s*', '', linha, flags=re.IGNORECASE).strip().lower()
+                resposta = re.split(r'tags:|fonte:|ref:|\(ref:', resposta_bruta, flags=re.IGNORECASE)[0].strip()
                 pergunta_pendente = ""
 
+            # --- SALVAMENTO DIRETO (INCLUI REPETIDAS) ---
             if pergunta and resposta:
-                # Chave única baseada em Pergunta + Resposta
-                chave_faq = (pergunta, resposta)
-
-                if chave_faq in pares_vistos:
-                    arquivo_origem = pares_vistos[chave_faq]
-                    print(f"   ⚠️ Aviso: Pergunta e Resposta duplicadas encontradas!")
-                    print(f"      Conteúdo: '{pergunta[:40]}...'")
-                    print(f"      -> se encontra no arquivo: {arquivo_origem} e no arquivo: {nome_arquivo}")
-                else:
-                    pares_vistos[chave_faq] = nome_arquivo
-
-                bloco_contexto = " ".join(paragrafos[max(0, i-1):i+2])
+                # Extração de metadados baseada no contexto da linha atual
+                bloco_contexto = " ".join(paragrafos[max(0, i-1):min(len(paragrafos), i+2)])
                 tags, fonte = extrair_metadados(bloco_contexto)
 
                 collection.insert_one({
@@ -131,7 +127,6 @@ def processar_faqs_drive(collection):
                 itens_no_documento += 1
                 total_geral += 1
         
-        # Define o emoji com base na quantidade de itens processados
         status_emoji = "✅" if itens_no_documento > 0 else "⭕"
         print(f"{indice} {status_emoji} FAQ ({nome_arquivo}) -> {itens_no_documento} itens processados")
                 
@@ -143,15 +138,18 @@ def main():
         db = client['ministerio_saude']
         col = db['faq_medicamentos']
         
-        print("--- Iniciando Sincronização MS (Drive -> MongoDB) ---")
+        print("\n--- Iniciando Sincronização MS (Drive -> MongoDB) ---")
+        
+        # Limpa o banco antes de começar para evitar acúmulo infinito entre execuções
         col.delete_many({}) 
         
         total = processar_faqs_drive(col)
+        
         print("---")
-        print(f"Finalizado! Total de {total} itens inseridos no Banco de Dados.")
+        print(f"Finalizado! Total de {total} itens inseridos (incluindo repetidos encontrados nos arquivos).")
         client.close()
     except Exception as e:
-        print(f"❌ Erro: {e}")
+        print(f"❌ Erro Crítico: {e}")
 
 if __name__ == "__main__":
     main()
