@@ -4,8 +4,9 @@ import io
 import logging
 import unicodedata
 import time
+import hashlib
 from datetime import datetime, timezone
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Optional
 
 # Bibliotecas externas
 from dotenv import load_dotenv
@@ -73,6 +74,22 @@ def extrair_tags_e_fonte(paragrafos: List[str], i: int) -> Tuple[List[str], str]
     tags = [t.strip().lower() for t in re.split(r'[,\s]+', t_match.group(1).replace('#', '')) if t.strip()] if t_match else []
     
     return tags, fonte
+
+def gerar_hash_conteudo(pergunta: str, resposta: str) -> str:
+    """Gera hash MD5 do conteúdo para detectar mudanças."""
+    conteudo = f"{pergunta}|{resposta}"
+    return hashlib.md5(conteudo.encode('utf-8')).hexdigest()
+
+def carregar_embeddings_existentes(collection, file_id: str) -> Dict[str, List[float]]:
+    """Carrega embeddings existentes indexados por hash do conteúdo."""
+    cache = {}
+    docs = collection.find(
+        {"file_id": file_id, "content_hash": {"$exists": True}, "embedding": {"$ne": None}},
+        {"content_hash": 1, "embedding": 1}
+    )
+    for doc in docs:
+        cache[doc["content_hash"]] = doc["embedding"]
+    return cache
 
 # ============================================================================
 # 3. CONFIGURAÇÃO DO ÍNDICE VETORIAL ATLAS
@@ -150,6 +167,11 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
 
         logger.info(f"🔄 Atualizando: {nome_arq}")
         try:
+            # Carregar cache de embeddings existentes antes de deletar
+            cache_embeddings = carregar_embeddings_existentes(col_dados, file_id)
+            embeddings_reutilizados = 0
+            embeddings_gerados = 0
+            
             request = service.files().get_media(fileId=file_id)
             fh = io.BytesIO()
             downloader = MediaIoBaseDownload(fh, request)
@@ -208,14 +230,22 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
                     if pergunta and resposta:
                         tags, fonte = extrair_tags_e_fonte(linhas, i)
                         
-                        # Gerar embedding para busca vetorial
-                        texto_para_embedding = f"{pergunta} {resposta}"
-                        try:
-                            embedding_result = gerarEmbedding(texto_para_embedding)
-                            embedding_vector = embedding_result.embeddings[0].values
-                        except Exception as emb_error:
-                            logger.warning(f"  ⚠️ Falha ao gerar embedding na linha {num_linha_real}: {emb_error}")
-                            embedding_vector = None
+                        # Verificar se já temos embedding cacheado para este conteúdo
+                        content_hash = gerar_hash_conteudo(pergunta, resposta)
+                        embedding_vector = cache_embeddings.get(content_hash)
+                        
+                        if embedding_vector:
+                            embeddings_reutilizados += 1
+                        else:
+                            # Gerar novo embedding apenas se o conteúdo mudou
+                            texto_para_embedding = f"{pergunta} {resposta}"
+                            try:
+                                embedding_result = gerarEmbedding(texto_para_embedding)
+                                embedding_vector = embedding_result.embeddings[0].values
+                                embeddings_gerados += 1
+                            except Exception as emb_error:
+                                logger.warning(f"  ⚠️ Falha ao gerar embedding na linha {num_linha_real}: {emb_error}")
+                                embedding_vector = None
                         
                         lote_arquivo.append({
                             "question": pergunta,
@@ -227,9 +257,10 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
                             "file_id": file_id,
                             "file_origin": nome_arq,
                             "line_reference": num_linha_real,
+                            "content_hash": content_hash,  # Hash para cache de embeddings
                             "isActive": True,
                             "updatedAt": datetime.now(timezone.utc),
-                            "embedding": embedding_vector  # Vetor para MongoDB Atlas Vector Search
+                            "embedding": embedding_vector
                         })
 
                 except Exception as line_error:
@@ -252,6 +283,7 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
                 )
                 itens_novos_total += len(lote_arquivo)
                 logger.info(f"   ✔️ Sucesso: {len(lote_arquivo)} itens sincronizados.")
+                logger.info(f"   💰 Embeddings: {embeddings_reutilizados} reutilizados, {embeddings_gerados} novos gerados.")
 
         except Exception as file_error:
             logger.error(f"   ❌ Falha crítica ao processar o arquivo {nome_arq}: {file_error}")
