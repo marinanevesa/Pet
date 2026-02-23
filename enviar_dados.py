@@ -10,10 +10,14 @@ from typing import List, Tuple
 # Bibliotecas externas
 from dotenv import load_dotenv
 from pymongo import MongoClient
+from pymongo.operations import SearchIndexModel
 from docx import Document
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
+
+# Módulos locais
+from lib.gemini_embendding import gerarEmbedding
 
 # ============================================================================
 # 1. CONFIGURAÇÕES E LOGGING
@@ -71,7 +75,52 @@ def extrair_tags_e_fonte(paragrafos: List[str], i: int) -> Tuple[List[str], str]
     return tags, fonte
 
 # ============================================================================
-# 3. LÓGICA DE SINCRONIZAÇÃO INTELIGENTE
+# 3. CONFIGURAÇÃO DO ÍNDICE VETORIAL ATLAS
+# ============================================================================
+
+def criar_indice_vetorial(collection):
+    """Cria o índice vetorial no MongoDB Atlas para busca semântica."""
+    # Dimensão do embedding do Gemini gemini-embedding-001 é 768
+    EMBEDDING_DIMENSION = 768
+    INDEX_NAME = "vector_index"
+    
+    # Verifica se o índice já existe
+    existing_indexes = list(collection.list_search_indexes())
+    if any(idx.get("name") == INDEX_NAME for idx in existing_indexes):
+        logger.info(f"✅ Índice vetorial '{INDEX_NAME}' já existe.")
+        return
+    
+    search_index_model = SearchIndexModel(
+        definition={
+            "fields": [
+                {
+                    "type": "vector",
+                    "path": "embedding",
+                    "numDimensions": EMBEDDING_DIMENSION,
+                    "similarity": "cosine"
+                },
+                {
+                    "type": "filter",
+                    "path": "isActive"
+                },
+                {
+                    "type": "filter",
+                    "path": "category"
+                }
+            ]
+        },
+        name=INDEX_NAME,
+        type="vectorSearch"
+    )
+    
+    try:
+        collection.create_search_index(model=search_index_model)
+        logger.info(f"✅ Índice vetorial '{INDEX_NAME}' criado com sucesso.")
+    except Exception as e:
+        logger.warning(f"⚠️ Não foi possível criar índice vetorial: {e}")
+
+# ============================================================================
+# 4. LÓGICA DE SINCRONIZAÇÃO INTELIGENTE
 # ============================================================================
 
 def processar_faqs_drive(db) -> Tuple[int, int]:
@@ -158,6 +207,16 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
                     # Se conseguimos formar um par P&R, salvamos no lote
                     if pergunta and resposta:
                         tags, fonte = extrair_tags_e_fonte(linhas, i)
+                        
+                        # Gerar embedding para busca vetorial
+                        texto_para_embedding = f"{pergunta} {resposta}"
+                        try:
+                            embedding_result = gerarEmbedding(texto_para_embedding)
+                            embedding_vector = embedding_result.embeddings[0].values
+                        except Exception as emb_error:
+                            logger.warning(f"  ⚠️ Falha ao gerar embedding na linha {num_linha_real}: {emb_error}")
+                            embedding_vector = None
+                        
                         lote_arquivo.append({
                             "question": pergunta,
                             "question_normalized": normalizar_para_busca(pergunta),
@@ -167,9 +226,10 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
                             "source": fonte,
                             "file_id": file_id,
                             "file_origin": nome_arq,
-                            "line_reference": num_linha_real, # Rastreabilidade para auditoria
+                            "line_reference": num_linha_real,
                             "isActive": True,
-                            "updatedAt": datetime.now(timezone.utc)
+                            "updatedAt": datetime.now(timezone.utc),
+                            "embedding": embedding_vector  # Vetor para MongoDB Atlas Vector Search
                         })
 
                 except Exception as line_error:
@@ -199,7 +259,7 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
     return itens_novos_total, arquivos_pulados
 
 # ============================================================================
-# 4. EXECUÇÃO
+# 5. EXECUÇÃO
 # ============================================================================
 
 def main():
@@ -208,12 +268,17 @@ def main():
     
     try:
         db = client[DB_NAME]
+        col_dados = db[COL_DADOS]
+        
         print("\n" + "═"*60)
         logger.info("🚀 INICIANDO SINCRONIZADOR INTELIGENTE (MODO INCREMENTAL)")
         
+        # Garante que o índice vetorial existe
+        criar_indice_vetorial(col_dados)
+        
         novos, pulados = processar_faqs_drive(db)
         
-        total_ativos = db[COL_DADOS].count_documents({"isActive": True})
+        total_ativos = col_dados.count_documents({"isActive": True})
 
         print("\n" + "📊 RELATÓRIO FINAL DE OPERAÇÃO")
         print("─"*60)
