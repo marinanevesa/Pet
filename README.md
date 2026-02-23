@@ -1,63 +1,107 @@
-# Script de FAQs - Ministério da Saúde
+# 📜 Script de FAQs Inteligente - Ministério da Saúde
 
-Script para processar arquivos .docx com perguntas e respostas e enviar para o MongoDB.
+Este projeto automatiza a extração de Perguntas e Respostas (FAQs) de documentos hospedados no **Google Drive** e realiza a sincronização com um banco de dados **MongoDB Atlas**. Ele foi desenhado para facilitar a curadoria de dados do chatbot de saúde, permitindo que a equipe atualize apenas o Word no Drive para que o robô aprenda as novas informações.
 
-## Como Usar
+---
 
-- Instale as dependências: `pip install pymongo python-docx python-dotenv`
-- Crie um arquivo `.env` na raiz do projeto com sua URI do MongoDB
+## 🛠️ O que o Script Faz
 
-## Configuração de Arquivos
+1. **Conexão Google Cloud**: Autentica-se via Conta de Serviço para acessar pastas específicas no Google Drive.
+2. **Download Dinâmico**: Localiza todos os arquivos `.docx` dentro da pasta configurada.
+3. **Processamento de Texto (Regex)**:
+* Varre o documento em busca de padrões `P:` (Pergunta) e `R:` (Resposta).
+* Suporta perguntas e respostas na mesma linha ou em linhas separadas.
+* Detecta automaticamente mudanças de **[ASSUNTO]** dentro do texto.
 
-Edite a lista `ARQUIVOS_PROCESSAR` no início do arquivo `enviar_dados.py`:
 
-```python
-ARQUIVOS_PROCESSAR = [
-    ("./faqs/medicamento.docx", "Medicamentos"),
-    ("./faqs/local.docx", "Local"),
-    ("./faqs/vacinas.docx", "Vacina"),
-]
+4. **Extração de Metadados**: Separa de forma inteligente as `TAGS` e a `FONTE` (Referência) de cada item.
+5. **Sincronização MongoDB**:
+* Limpa a base antiga para evitar duplicidade.
+* Insere os novos dados com data de atualização (`updatedAt`) e status ativo.
+
+
+
+---
+
+## 🚀 Como Rodar o Código
+
+### 1. Pré-requisitos
+
+Certifique-se de ter o Python 3.8+ instalado e as bibliotecas necessárias:
+
+```bash
+pip install pymongo python-docx python-dotenv google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
 ```
 
-- **Primeiro valor**: Caminho do arquivo .docx
-- **Segundo valor**: Categoria da FAQ
+### 2. Configuração de Credenciais
 
-## Formato dos Dados
+* **MongoDB**: Obtenha sua Connection String no MongoDB Atlas.
+* **Google Drive**:
+* Crie um projeto no [Google Cloud Console](https://console.cloud.google.com/).
+* Ative a **Google Drive API**.
+* Crie uma **Conta de Serviço**, gere uma chave JSON e salve-a na raiz do projeto com o nome `credentials.json`.
+* **Importante**: Compartilhe a pasta do Google Drive com o e-mail da sua Conta de Serviço (ex: `leitor-drive-faq@...`).
 
-Cada parágrafo no arquivo .docx deve seguir este formato:
+
+
+### 3. Variáveis de Ambiente (.env)
+
+Crie um arquivo `.env` na raiz com:
+
+```env
+MONGODB_URI=sua_uri_aqui
 
 ```
-P: Sua pergunta aqui? R: Sua resposta aqui. (Ref: Fonte da informação) TAGS: tag1,tag2,tag3.
+
+### 4. Execução
+
+Para processar e enviar os dados para o banco:
+
+```bash
+python enviar_dados.py
+
 ```
 
-### Exemplo:
-
-```
-P: Onde eu posso buscar meu Ácido Fólico 5 mg comprimido de graça aqui em Franca? R: O senhor ou a senhora pode retirar nas farmácias de qualquer Unidade Básica de Saúde (UBS), os "postinhos" perto da sua casa. (Ref: REMUME Franca, pág. 2) TAGS: Ácido Fólico,local de retirada,UBS.
-```
-
-### Estrutura:
-
-- **P:** - Inicia a pergunta
-- **R:** - Inicia a resposta
-- **(Ref: ...)** ou **(FONTE: ...)** - Fonte da informação (opcional)
-- **TAGS:** - Lista de tags separadas por vírgula (opcional)
-
-## Teste sem Enviar
-
-Para testar o processamento sem enviar ao MongoDB:
+Para apenas **testar a extração** e ver o que seria enviado (sem tocar no banco de dados):
 
 ```bash
 python test_enviar_dados.py
+
 ```
 
-Este comando mostra o JSON formatado no terminal sem inserir no banco.
+---
 
-## O que o Script Faz
+## 📝 Formatação dos Documentos (.docx)
 
-1. Conecta ao MongoDB
-2. Limpa a coleção existente
-3. Processa cada arquivo .docx configurado
-4. Extrai perguntas, respostas, tags e fontes
-5. Insere os dados no MongoDB com a categoria correspondente
-6. Mostra resumo do processamento
+Para que o script reconheça as informações, os documentos no Drive devem seguir um destes padrões:
+
+**Opção A (Mesma linha):**
+
+> P: Qual a dose do paracetamol? R: 500mg. TAGS: dose, paracetamol. FONTE: Protocolo MS 2024.
+
+**Opção B (Linhas separadas):**
+
+> P: Como armazenar a insulina?
+> R: Deve ser mantida em refrigeração entre 2°C e 8°C.
+> TAGS: armazenamento, insulina. FONTE: Manual ABC.
+
+**Mudança de Categoria:**
+
+> [ASSUNTO: Medicamentos Especiais]
+
+---
+
+## 📂 Estrutura do Projeto
+
+* `enviar_dados.py`: O "cérebro" do projeto. Faz o download do Drive e upload para o Mongo.
+* `test_enviar_dados.py`: Versão de segurança para validar a lógica de extração.
+* `.env`: Guarda sua senha do banco de dados (não deve ser enviado ao GitHub).
+* `credentials.json`: Chave de acesso ao Google Cloud (não deve ser enviado ao GitHub).
+* `.gitignore`: Protege seus arquivos sensíveis de serem expostos.
+
+---
+
+### ⚠️ Aviso de Segurança
+
+> As chaves de API e senhas foram removidas deste repositório por segurança. Caso tenha exposto sua `private_key` no histórico do Git, revogue-a imediatamente no console do Google Cloud.
