@@ -14,10 +14,13 @@ from googleapiclient.http import MediaIoBaseDownload
 load_dotenv()
 
 # ============================================================================
-# CONFIGURAÇÕES
+# CONFIGURAÇÕES (carregadas do arquivo .env)
 # ============================================================================
-ID_PASTA_DRIVE = "17J91pfYw-_AQFpt8_Jls96PBowM-Az-5"
-FILE_CREDENTIALS = "credentials.json"
+ID_PASTA_DRIVE = os.getenv("ID_PASTA_DRIVE")
+FILE_CREDENTIALS = os.getenv("FILE_CREDENTIALS", "credentials.json")
+
+if not ID_PASTA_DRIVE:
+    raise ValueError("❌ ID_PASTA_DRIVE não definido! Configure no arquivo .env")
 
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 

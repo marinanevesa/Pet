@@ -47,12 +47,31 @@ pip install pymongo python-docx python-dotenv google-api-python-client google-au
 
 ### 3. Variáveis de Ambiente (.env)
 
-Crie um arquivo `.env` na raiz com:
+> ⚠️ **IMPORTANTE**: O arquivo `.env` contém suas credenciais secretas. **NUNCA** envie este arquivo para o GitHub!
+
+Copie o arquivo de exemplo e preencha com suas credenciais:
+
+```bash
+cp .env.example .env
+```
+
+Edite o `.env` com os valores reais:
 
 ```env
-MONGODB_URI=sua_uri_aqui
+# String de conexão do MongoDB Atlas
+MONGODB_URI=mongodb+srv://usuario:senha@cluster.mongodb.net/database
 
+# Chave da API do Google Gemini
+GEMINI_API_KEY=sua_api_key_aqui
+
+# ID da pasta do Google Drive (pegue da URL da pasta)
+ID_PASTA_DRIVE=17J91pfYw-_AQFpt8_Jls96PBowM-Az-5
+
+# Caminho para credenciais do Google (opcional, padrão: credentials.json)
+FILE_CREDENTIALS=credentials.json
 ```
+
+> 💡 **Para suas colegas**: O ID da pasta do Drive e credenciais do banco **não podem ficar no código fonte**! Se subirem pro GitHub, qualquer pessoa pode acessar nossos dados.
 
 ### 4. Execução
 

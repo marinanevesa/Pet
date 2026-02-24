@@ -35,10 +35,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Configurações do Ambiente
-ID_PASTA_DRIVE = os.getenv("ID_PASTA_DRIVE", "17J91pfYw-_AQFpt8_Jls96PBowM-Az-5")
-FILE_CREDENTIALS = "credentials.json"
+# Configurações do Ambiente (carregadas do arquivo .env)
+ID_PASTA_DRIVE = os.getenv("ID_PASTA_DRIVE")
+FILE_CREDENTIALS = os.getenv("FILE_CREDENTIALS", "credentials.json")
 URI_MONGO = os.getenv("MONGODB_URI")
+
+if not ID_PASTA_DRIVE:
+    raise ValueError("❌ ID_PASTA_DRIVE não definido! Configure no arquivo .env")
+if not URI_MONGO:
+    raise ValueError("❌ MONGODB_URI não definido! Configure no arquivo .env")
 DB_NAME = "ministerio_saude"
 COL_DADOS = "faq_medicamentos"
 COL_META = "sync_metadata" 
