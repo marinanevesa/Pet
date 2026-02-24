@@ -159,8 +159,13 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
 
     itens_novos_total = 0
     arquivos_pulados = 0
+    LIMITE_PERGUNTAS = 100  # Limite de perguntas para esta execução
 
     for arq in arquivos:
+        # Verifica se já atingiu o limite de perguntas
+        if itens_novos_total >= LIMITE_PERGUNTAS:
+            logger.info(f"🛑 Limite de {LIMITE_PERGUNTAS} perguntas atingido. Parando processamento.")
+            break
         file_id = arq['id']
         nome_arq = arq['name']
         data_drive = arq['modifiedTime']
@@ -192,6 +197,7 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
             # Variáveis de controle para rastreamento de perguntas multi-linha
             pergunta_pendente = ""
             linha_inicio_pergunta = 0
+            perguntas_no_arquivo = 0  # Contador para este arquivo
 
             # Iteração sobre os parágrafos do documento
             for i, linha in enumerate(linhas):
@@ -233,6 +239,13 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
 
                     # Se conseguimos formar um par P&R, salvamos no lote
                     if pergunta and resposta:
+                        # Verificar limite ANTES de processar
+                        total_ate_agora = itens_novos_total + perguntas_no_arquivo
+                        if total_ate_agora >= LIMITE_PERGUNTAS:
+                            logger.info(f"🛑 Limite de {LIMITE_PERGUNTAS} perguntas atingido. Parando processamento do arquivo.")
+                            break
+                        
+                        perguntas_no_arquivo += 1
                         tags, fonte = extrair_tags_e_fonte(linhas, i)
                         
                         # Verificar se já temos embedding cacheado para este conteúdo
@@ -241,10 +254,12 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
                         
                         if embedding_vector:
                             embeddings_reutilizados += 1
+                            logger.info(f"   📌 [{total_ate_agora + 1}/{LIMITE_PERGUNTAS}] Reutilizando embedding...")
                         else:
                             # Gerar novo embedding apenas se o conteúdo mudou
                             texto_para_embedding = f"{pergunta} {resposta}"
                             try:
+                                logger.info(f"   🔄 [{total_ate_agora + 1}/{LIMITE_PERGUNTAS}] Gerando embedding...")
                                 embedding_result = gerarEmbedding(texto_para_embedding)
                                 embedding_vector = embedding_result.embeddings[0].values
                                 embeddings_gerados += 1
