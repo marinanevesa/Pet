@@ -145,6 +145,9 @@ def criar_indice_vetorial(collection):
 # 4. LÓGICA DE SINCRONIZAÇÃO INTELIGENTE
 # ============================================================================
 
+# Limite máximo de embeddings novos gerados por execução (após atingir, envia sem embedding)
+LIMITE_EMBEDDINGS = 700
+
 def processar_faqs_drive(db) -> Tuple[int, int]:
     col_dados = db[COL_DADOS]
     col_meta = db[COL_META]
@@ -159,6 +162,8 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
 
     itens_novos_total = 0
     arquivos_pulados = 0
+    embeddings_gerados_global = 0  # Contador global de embeddings gerados nesta execução
+    embedding_desativado = False   # Flag: True = parou de gerar embeddings (limite ou erro de API)
 
     for arq in arquivos:
         file_id = arq['id']
@@ -245,17 +250,34 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
                         if embedding_vector:
                             embeddings_reutilizados += 1
                             logger.info(f"   📌 [{total_ate_agora}] Reutilizando embedding...")
+                        elif embedding_desativado:
+                            # Limite atingido ou erro de API — envia sem embedding
+                            logger.info(f"   ⏭️  [{total_ate_agora}] Sem embedding (limite atingido).")
+                            embedding_vector = None
                         else:
                             # Gerar novo embedding apenas se o conteúdo mudou
                             texto_para_embedding = f"{pergunta} {resposta}"
                             try:
-                                logger.info(f"   🔄 [{total_ate_agora}] Gerando embedding...")
+                                logger.info(f"   🔄 [{total_ate_agora}] Gerando embedding ({embeddings_gerados_global + 1}/{LIMITE_EMBEDDINGS})...")
                                 embedding_result = gerarEmbedding(texto_para_embedding)
                                 embedding_vector = embedding_result.embeddings[0].values
                                 embeddings_gerados += 1
+                                embeddings_gerados_global += 1
+                                
+                                # Verificar se atingiu o limite
+                                if embeddings_gerados_global >= LIMITE_EMBEDDINGS:
+                                    embedding_desativado = True
+                                    logger.warning(f"\n  🛑 LIMITE DE {LIMITE_EMBEDDINGS} EMBEDDINGS ATINGIDO!")
+                                    logger.warning(f"  ⏭️  Restante será enviado SEM embedding para o banco.\n")
                             except Exception as emb_error:
                                 logger.warning(f"  ⚠️ Falha ao gerar embedding na linha {num_linha_real}: {emb_error}")
                                 embedding_vector = None
+                                # Se o erro parece ser de limite/rate limit, desativa embeddings
+                                erro_str = str(emb_error).lower()
+                                if any(termo in erro_str for termo in ['rate limit', 'quota', 'resource exhausted', '429', 'limit exceeded']):
+                                    embedding_desativado = True
+                                    logger.warning(f"\n  🛑 ERRO DE LIMITE DA API GEMINI DETECTADO!")
+                                    logger.warning(f"  ⏭️  Restante será enviado SEM embedding para o banco.\n")
                         
                         lote_arquivo.append({
                             "question": pergunta,
@@ -292,8 +314,9 @@ def processar_faqs_drive(db) -> Tuple[int, int]:
                     upsert=True
                 )
                 itens_novos_total += len(lote_arquivo)
+                sem_embedding = sum(1 for item in lote_arquivo if item.get('embedding') is None)
                 logger.info(f"   ✔️ Sucesso: {len(lote_arquivo)} itens sincronizados.")
-                logger.info(f"   💰 Embeddings: {embeddings_reutilizados} reutilizados, {embeddings_gerados} novos gerados.")
+                logger.info(f"   💰 Embeddings: {embeddings_reutilizados} reutilizados, {embeddings_gerados} novos gerados, {sem_embedding} sem embedding.")
 
         except Exception as file_error:
             logger.error(f"   ❌ Falha crítica ao processar o arquivo {nome_arq}: {file_error}")

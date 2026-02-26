@@ -15,7 +15,7 @@ def gerarEmbedding(question):
         result = client.models.embed_content(
             model="gemini-embedding-001", #Verificar model
             contents=question,
-            config=types.EmbedContentConfig(task_type="SEMANTIC_SIMILARITY")
+            config=types.EmbedContentConfig(task_type="SEMANTIC_SIMILARITY", output_dimensionality=768)
         )
         return result
     finally:
