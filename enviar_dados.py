@@ -102,8 +102,6 @@ def carregar_embeddings_existentes(collection, file_id: str) -> Dict[str, List[f
 
 def criar_indice_vetorial(collection):
     """Cria o índice vetorial no MongoDB Atlas para busca semântica."""
-    # Dimensão do embedding do Gemini gemini-embedding-001 é 768
-    EMBEDDING_DIMENSION = 768
     INDEX_NAME = "vector_index"
     
     # Verifica se o índice já existe
@@ -118,7 +116,7 @@ def criar_indice_vetorial(collection):
                 {
                     "type": "vector",
                     "path": "embedding",
-                    "numDimensions": EMBEDDING_DIMENSION,
+                    "numDimensions": 3072,
                     "similarity": "cosine"
                 },
                 {
